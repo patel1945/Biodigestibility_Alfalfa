@@ -1,0 +1,124 @@
+---
+title: "Biodigestibility"
+author: "Smit"
+date: "2023-06-06"
+output: word_document
+---
+
+
+```{r}
+#Loading phenotypic data
+getwd()
+library(readxl)
+Phenotypic <- read_excel("Desktop/Smit/Biodigestibilty/2023.05.18 allsamplelistWSUgrant.xlsx")
+head(Phenotypic)
+```
+
+```{r}
+library(ggplot2)
+library(dplyr)
+library(tidyr)
+
+Phenotypic=as.data.frame(Phenotypic)
+
+
+str(Phenotypic)
+
+Phenotypic$Spectra_Sample_Number=as.numeric(Phenotypic$Spectra_Sample_Number)
+Phenotypic$Location=as.factor(Phenotypic$Location)
+Phenotypic$Harvest_Year=as.factor(Phenotypic$Harvest_Year)
+Phenotypic_2018=Phenotypic %>%  filter(Harvest_Year==2018)
+
+
+
+Phenotypic %>%  filter(Harvest_Year==2018) %>% ggplot(aes(Spectra_Sample_Number, CP, color=Location)) + 
+  geom_point()
+Phenotypic %>%  filter(Harvest_Year==2018) %>% ggplot(aes(Spectra_Sample_Number, SP, color=Location)) + 
+  geom_point()
+Phenotypic %>% filterggplot(aes(Spectra_Sample_Number, DM, color=Location)) + 
+  geom_point()
+
+head(Phenotypic_2018)
+
+```
+
+
+```{r}
+library(ggplot2)
+library(tidyr)
+Phenotypic_2018
+P_DM_long=Phenotypic_2018%>%select(Spectra_Sample_Number, Location, CP, Ash, aNDFom, ADICP, NDICP, SP)
+P_DM_long=P_DM_long%>%gather(key = "Phenotype", value = "Percent",-Spectra_Sample_Number, -Location)
+Facet_DM_labels=c(CP="Crude Protein", 
+                  Ash="Ash", 
+                  aNDFom="NDF exluding residual ash", 
+                  ADICP="Acid detergent insoluble CP", 
+                  NDICP="Neutral detergent insoluble CP", 
+                  SP="Soluble protein")
+
+#Plotting for all the variable with DM basis
+ggplot(P_DM_long, aes(x = Spectra_Sample_Number, y = Percent, color =Location)) +
+  geom_point() +
+  facet_wrap(~ Phenotype,scales =  "free_y",ncol = 2, labeller = as_labeller(Facet_DM_labels)) +
+labs(title = "Wet Chemistry from Dairyland Labs",x = "Spectra Sample Number", y = "% Dry Matter", fill = "Location")
+
+Phenotypic_2018 %>% ggplot(aes(Spectra_Sample_Number, DM, color=Location)) + 
+  geom_point() + labs(title = "Dry Matter",x = "Spectra Sample Number", y = "% Total Weight", fill = "Location")
+```
+
+```{r}
+P_CP_long=Phenotypic_2018%>%select(Spectra_Sample_Number, Location, A1, A2, B1, B2, C, A, B, ERD6)
+P_CP_long=P_CP_long%>%gather(key = "Phenotype", value = "Percent",-Spectra_Sample_Number, -Location)
+Facet_CP_labels=c(A1="Ammonia", 
+                  A2="Soluble true protein", 
+                  B1="Insoluble true protein", 
+                  B2="Fiber-bound protein", 
+                  C="Indigestible protein", 
+                  A="Rumen fluid soluble protein",
+                  B="Potentially digestible protein",
+                  ERD6="Effective rumen degradibility")
+
+
+#Plotting for all the variable with CP basis
+ggplot(P_CP_long, aes(x = Spectra_Sample_Number, y = Percent, color =Location)) +
+  geom_point() +
+  facet_wrap(~ Phenotype,scales =  "free_y",ncol = 2, labeller = as_labeller(Facet_CP_labels)) +
+labs(title = "CNCPS calculations and in vitro degradation parameters",x = "Spectra Sample Number", y = "% Crude Protein", fill = "Location")
+
+Phenotypic_2018 %>% ggplot(aes(Spectra_Sample_Number, CP, color=Location)) + 
+  geom_point() + labs(title = "Crude Protein",x = "Spectra Sample Number", y = "% Dry Matter", fill = "Location")
+
+Phenotypic_2018%>% ggplot(aes(Spectra_Sample_Number, kd, color=Location)) + 
+  geom_point() + labs(title = "Franctional rate of ruminal digestion",x = "Spectra Sample Number", y = "% per hour", fill = "Location")
+
+```
+
+```{r}
+#Correlation matrix and Principal component
+##Heat map and dedogram for hierarchical clustering 
+Phenotypic_2018=Phenotypic %>%  filter(Harvest_Year==2018)
+Phenotypic_2018=Phenotypic_2018%>%select(-Date_NIRSC, -Location, -Spectra_Sample_Number,-Harvest_Year,-A1)
+Pheno_matrix=as.matrix(Phenotypic_2018)
+rownames(Pheno_matrix)=Phenotypic_2018$Spectra_Sample_Number
+str(Pheno_matrix)
+heatmap(x=Pheno_matrix, scale = "column")
+##PCA
+install.packages("ggfortify")
+library(ggfortify)
+Phenotypic_2018=Phenotypic %>%  filter(Harvest_Year==2018)
+Phenotypic_2018=Phenotypic_2018%>%select(-Date_NIRSC,-Harvest_Year,-A1)
+PhenoforPCA=Phenotypic_2018%>%remove_missing(na.rm = TRUE)
+pca_pheno=prcomp(select(PhenoforPCA, -Location), scale. = TRUE)
+
+autoplot(pca_pheno, data=PhenoforPCA, color='Location')
+summary(pca_pheno)
+
+##K means clustering
+install.packages('factoextra')
+library(factoextra)
+fviz_nbclust(select(PhenoforPCA, -Location), kmeans, method = "silhouette")
+kmeans_pheno=kmeans(select(PhenoforPCA, -Location), center=4)
+aggregate(select(PhenoforPCA, -Location), by=list(cluster=kmeans_pheno$cluster), mean)
+fviz_cluster(kmeans_pheno, data=select(PhenoforPCA, -Location))
+```
+
