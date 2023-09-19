@@ -1,0 +1,9 @@
+Trait,Marker1,Score,Effect,uniprot,protein_name
+Ash,Chr7_36295249,6.21,0.335800822,NA,NA
+C,Chr4_74919811,6.37,NA,A0A2P5EVS0,Phosphate-induced protein
+C,Chr6_21685843,6.46,NA,NA,NA
+C,Chr4_84087441,6.33,-0.116162538,A0A2Z6LS97,Uncharacterized protein
+C,Chr4_82856159,6.14,-0.354983007,UPI000C1CE6EF,DNA replication licensing factor MCM6-like
+C,Chr4_82856163,6.14,0.354983007,UPI000C1CE6EF,DNA replication licensing factor MCM6-like
+C,Chr4_83441127,6.14,-0.354983007,UPI0010A38ECA,tRNA-splicing endonuclease subunit Sen54-like isoform X1
+C,Chr4_83819379,6.15,0.32540589,A0A2K3NTD0,Putative TRAF superfamily protein
