@@ -40,25 +40,25 @@ S2 <- QTL_01 %>% unite(col = "Marker1", 5:6, sep = "_", remove = F) %>% dplyr::s
 
 
 # R2
-
-cc <- count(QTL_01,Trait)
-lev4 <- cc$Trait
-lev4
-cc1 <- count(QTL_01, Model)
-cc1$Model
-
-QTL_3 <- QTL_01 %>% dplyr::filter(!Model %in% c("diplo-general", "diplo-additive"))
-
-
-fit_05 <- fit.QTL(data=data_5, trait = "ID_2020_ADICP",
-                  qtl=QTL_3[,c("Marker","Model")])
-
-fit_06 <- fit_05 %>% unite(col = "Marker1", 2:3, sep = "_", remove = T) %>% dplyr::select(2,4) %>% distinct(Marker1, .keep_all = T)
-
-df4 <- left_join(S2, fit_06, by = "Marker1") %>% left_join(., df3, by = "Marker1")
-
-write.csv(df4, "~/Documents/git/Biodigestibility_Alfalfa/GWAS_results/anno_smit.csv", quote = F, row.names = F)
+# 
+# cc <- count(QTL_01,Trait)
+# lev4 <- cc$Trait
+# lev4
+# cc1 <- count(QTL_01, Model)
+# cc1$Model
+# 
+# QTL_3 <- QTL_01 %>% dplyr::filter(!Model %in% c("diplo-general", "diplo-additive"))
+# 
+# 
+# fit_05 <- fit.QTL(data=data_5, trait = "ID_2020_ADICP",
+#                   qtl=QTL_3[,c("Marker","Model")])
+# 
+# fit_06 <- fit_05 %>% unite(col = "Marker1", 2:3, sep = "_", remove = T) %>% dplyr::select(2,4) %>% distinct(Marker1, .keep_all = T)
+# 
+# df4 <- left_join(S2, fit_06, by = "Marker1") %>% left_join(., df3, by = "Marker1")
+# 
+# write.csv(df4, "~/Documents/git/Biodigestibility_Alfalfa/GWAS_results/anno_smit.csv", quote = F, row.names = F)
 
 
 df4 <- left_join(S2, df3, by = "Marker1")
-write.csv(df4, "~/Documents/git/Biodigestibility_Alfalfa/GWAS_results/anno_ces.csv", quote = F, row.names = F)
+write.csv(df4, "~/Documents/git/Biodigestibility_Alfalfa/GWAS_results/anno_ces_ST2.csv", quote = F, row.names = F)
