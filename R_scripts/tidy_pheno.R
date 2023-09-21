@@ -27,7 +27,7 @@ p5 <- p5 %>% dplyr::select(-Env)
 p6 <- inner_join(p1, p2, by = "Treatment") %>% inner_join(., p3, by = "Treatment") %>% inner_join(., p4, by = "Treatment") %>% inner_join(., p5, by = "Treatment")
 colnames(p6)[1] <- "gen"
 
-PCA1 <- read.csv("~/Documents/git/Biodigestibility_Alfalfa/BLUEs_ST/pheno_Bs.csv")
+PCA1 <- read.csv("~/Documents/git/Biodigestibility_Alfalfa/BLUEs_ST/PCA.csv")
 
 
 p6 <- inner_join(p6, PCA1, by = "gen")

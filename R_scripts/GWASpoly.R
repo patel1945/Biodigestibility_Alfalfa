@@ -25,7 +25,6 @@ models_1 <- c("general", "additive", "1-dom", "2-dom",  "diplo-additive", "diplo
 #                      fixed.type=rep("numeric",3), n.PC = 3)
 
 
-
 data <- read.GWASpoly(ploidy=4, 
                       pheno.file="~/Documents/git/Biodigestibility_Alfalfa/BLUEs_ST/pheno_Bs.csv", 
                       geno.file="~/Documents/git/big_files/Norberg_2.txt",
@@ -72,7 +71,6 @@ data_5 <- set.threshold(data_3_cm, method= "Bonferroni", level=0.05)
 
 QTL_01 <- get.QTL(data_5)
 QTL_02 <- QTL_01 %>% distinct(Marker, .keep_all = T) 
-
 
 
 write.csv(QTL_01, "~/Documents/git/Biodigestibility_Alfalfa/GWAS_results/QTL_01.csv", quote = F, row.names = F)
