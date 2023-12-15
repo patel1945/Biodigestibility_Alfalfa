@@ -16,10 +16,12 @@ autoplot(pca_pheno, data=phenoforPCA, color = 'Env')
 summary(pca_pheno)
 
 
-##Heat map and dedogram for hierarchical clustering 
+##Heat map and dedrogram for hierarchical clustering 
 
-Pheno_matrix=pheno_Bs%>%select(-Env)%>%as.matrix()
-rownames(Pheno_matrix)=pheno_Bs$Treatment
+Pheno=pheno_Bs%>%remove_missing(na.rm=T)
+Pheno_NO_T=Pheno%>%select(-Env, -Treatment)
+Pheno_matrix=Pheno_NO_T%>%as.matrix()
+rownames(Pheno_matrix)=Pheno$Treatment
 str(Pheno_matrix)
 h=heatmap(x=Pheno_matrix, scale = "column")
 ggsave(h, file="/home/hawkins/Desktop/Smit/Biodigestibilty/heatmap.png")
