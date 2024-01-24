@@ -16,9 +16,8 @@ custom_legend_labels=c("Idaho 2020", "Oregon 2020", "Oregon 2021", "Washington 2
 autoplot(pca_pheno, data=phenoforPCA, color = 'Env')+
   scale_color_discrete(labels=custom_legend_labels)+
   labs(color='Environment')+
-  theme_minimal()+
-  theme(panel.grid = element_blank())+
-  jpeg(filename = "PCA_Plot.jpeg")
+  theme(panel.grid = element_blank())
+ggsave(filename = "PCA_Plot.png", dpi=1000, device="png")
 summary(pca_pheno)
 
 
