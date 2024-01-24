@@ -12,7 +12,13 @@ phenoforPCA=pheno_Bs%>%select(-Treatment)
 phenoforPCA=phenoforPCA%>%remove_missing(na.rm = TRUE)
 pca_pheno=prcomp(select(phenoforPCA, -Env), scale. = TRUE)
 
-autoplot(pca_pheno, data=phenoforPCA, color = 'Env')
+custom_legend_labels=c("Idaho 2020", "Oregon 2020", "Oregon 2021", "Washington 2020", "Washington 2021")
+autoplot(pca_pheno, data=phenoforPCA, color = 'Env')+
+  scale_color_discrete(labels=custom_legend_labels)+
+  labs(color='Environment')+
+  theme_minimal()+
+  theme(panel.grid = element_blank())+
+  jpeg(filename = "PCA_Plot.jpeg")
 summary(pca_pheno)
 
 
