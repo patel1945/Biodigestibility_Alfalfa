@@ -24,8 +24,8 @@ summary(pca_pheno)
 ##Heat map and dedrogram for hierarchical clustering 
 
 Pheno=pheno_Bs%>%remove_missing(na.rm=T)
-Pheno_NO_T=Pheno%>%select(-Env, -Treatment)
-Pheno_matrix=Pheno_NO_T%>%as.matrix()
+Pheno_NO_T_DM=Pheno%>%select(-Env, -Treatment, -DM)
+Pheno_matrix=Pheno_NO_T_DM%>%as.matrix()
 rownames(Pheno_matrix)=Pheno$Treatment
 str(Pheno_matrix)
 h=heatmap(x=Pheno_matrix, scale = "column")
